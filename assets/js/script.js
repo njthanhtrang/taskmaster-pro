@@ -15,6 +15,8 @@ var createTask = function (taskText, taskDate, taskList) {
   // append span and p element to parent li
   taskLi.append(taskSpan, taskP);
 
+  // check due date
+  auditTask(taskLi);
 
   // append to ul list on the page
   $("#list-" + taskList).append(taskLi);
@@ -46,6 +48,25 @@ var loadTasks = function () {
 var saveTasks = function () {
   // tasks saved in array that's a property of object
   localStorage.setItem("tasks", JSON.stringify(tasks));
+};
+
+var auditTask = function(taskEl) {
+  // get date from task element, .trim() is JS
+  var date = $(taskEl).find("span").text().trim();
+
+  // convert to moment object at 5:00pm local time
+  var time = moment(date, "L").set("hour", 17);
+
+  // remove old classes from element, if update due date, red background removed
+  $(taskEl).removeClass("list-group-item-warning list-group-item-danger");
+
+  // apply new class if task is near/over due date
+  if (moment().isAfter(time)) {
+    $(taskEl).addClass("list-group-item-danger");
+    // Math.abs() gets absolute value of today-future date
+  } else if (Math.abs(moment().diff(time, "days")) <=2) {
+    $(taskEl).addClass("list-group-item-warning");
+  }
 };
 
 // enable drag and drop within same column and across other columns
@@ -229,6 +250,16 @@ $(".list-group").on("click", "span", function () {
   // swap out elements
   $(this).replaceWith(dateInput);
 
+  // enable jQuery UI datepicker
+  dateInput.datepicker({
+    minDate: 1,
+    // instruct dateInput element to trigger its own change event+execute callback tied to it
+    onClose: function() {
+      // when calendar is closed, force a "change" event on the 'dateInput'
+      $(this).trigger("change");
+    }
+  });
+
   // automatically focus on new element, bring up calendar
   dateInput.trigger("focus");
 });
@@ -258,9 +289,12 @@ $(".list-group").on("change", "input[type='text']", function () {
   var taskSpan = $("<span>")
     .addClass("badge badge-primary badge-pill")
     .text(date);
-
   // replace input with span element
   $(this).replaceWith(taskSpan);
+
+  // pass task's <li> element into auditTask() to check new due date
+  // audit tasks when they are edited
+  auditTask($(taskSpan).closest(".list-group-item"));
 });
 
 // remove all tasks
@@ -271,6 +305,12 @@ $("#remove-tasks").on("click", function () {
   }
   console.log(tasks);
   saveTasks();
+});
+
+// adds calendar
+$("#modalDueDate").datepicker({
+  // days after current date we want limit to kick in
+  minDate: 1
 });
 
 // load tasks for the first time
