@@ -67,6 +67,7 @@ var auditTask = function(taskEl) {
   } else if (Math.abs(moment().diff(time, "days")) <=2) {
     $(taskEl).addClass("list-group-item-warning");
   }
+  console.log(taskEl);
 };
 
 // enable drag and drop within same column and across other columns
@@ -79,19 +80,25 @@ $(".card .list-group").sortable({
   helper: "clone",
   // trigger once for all connected lists as son as dragging starts+stops
   activate: function (event, ui) {
-    console.log(ui);
+    console.log(ui)
+    $(this).addClass("dropover")
+    $(".bottom-trash").addClass("bottom-trash-drag");
   },
   // trigger once for all connected lists as son as dragging starts+stops
   deactivate: function (event, ui) {
-    console.log(ui);
+    console.log(ui)
+    $(this).removeClass("dropover")
+    $(".bottom-trash").removeClass(".bottom-class-drag");
   },
   // trigger when a dragged item enters/leaves connected list
   over: function (event) {
-    console.log(event);
+    console.log(event)
+    $(event.target).addClass("dropover-active");
   },
   // trigger when a dragged item enters/leaves connected list
   out: function (event) {
-    console.log(event);
+    console.log(event)
+    $(event.target).removeClass("dropover-active");
   },
   update: function () {
     var tempArr = [];
@@ -130,13 +137,16 @@ $("#trash").droppable({
   tolerance: "touch",
   drop: function (event, ui) {
     // remove dragged element from DOM
-    ui.draggable.remove();
+    ui.draggable.remove()
+    $(".bottom-trash").removeClass("bottom-trash-active");
   },
   over: function (event, ui) {
-    console.log(ui);
+    console.log(ui)
+    $(".bottom-trash").addClass("bottom-trash-active");
   },
   out: function (event, ui) {
-    console.log(ui);
+    console.log(ui)
+    $(".bottom-trash").removeClass("bottom-trash-active");
   }
 });
 // modal was triggered
@@ -151,7 +161,7 @@ $("#task-form-modal").on("shown.bs.modal", function () {
 });
 
 // save button in modal was clicked
-$("#task-form-modal .btn-primary").click(function () {
+$("#task-form-modal .btn-save").click(function () {
   // get form values
   var taskText = $("#modalTaskDescription").val();
   var taskDate = $("#modalDueDate").val();
@@ -315,5 +325,13 @@ $("#modalDueDate").datepicker({
 
 // load tasks for the first time
 loadTasks();
+
+setInterval(function() {
+  // loop over every task with class list-group-item.... each element
+  $(".card .list-group-item").each(function(index, el) {
+    auditTask(el);
+  });
+  // 30-min timer
+}, (1000* 60) * 30);
 
 

@@ -7,6 +7,10 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Staatliches&display=swap"
+    rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" />
   <link rel="stylesheet" href="./assets/css/style.css" />
   <title>Taskmaster Pro</title>
 </head>
@@ -23,15 +27,18 @@
           Taskmaster Pro Edition</h1>
         <!-- connect button to modal -->
         <div class="ml-md-auto w-100 w-md-auto">
-          <button id="create-task" class="btn btn-block btn-success" data-toggle="modal"
-            data-target="#task-form-modal">Add
-            Task</button>
-          <button id="remove-tasks" class="btn btn-block btn-danger mb-2 mb-md-4"></span>Delete All Tasks</button>
+          <!-- plus sign icon -->
+          <button id="create-task" class="btn btn-block btn-add" data-toggle="modal"
+            data-target="#task-form-modal"><span class="oi oi-plus mr-2"></span>Add Task</button>
+            <!-- trash icon -->
+          <button id="remove-tasks" class="btn btn-block btn-delete mb-2 mb-md-4"><span class="oi oi-trash"></span>Delete All Tasks</button>
         </div>
       </div>
+      <!-- checkmark -->
+      <span class="oi oi-task display-1 text-center mb-2 d-none d-lg-block mt-auto"></span>
       <!-- mt-auto places unused space on top of p instead of below, bc header is flexbox column -->
       <!-- display none, display large block -->
-      <p class="mt-auto d-none d-lg-block">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi voluptas
+      <p class="d-none d-lg-block">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi voluptas
         architecto ipsa
         excepturi aut non
         laudantium sequi fugit officiis optio deleniti asperiores rem eius laborum maxime blanditiis culpa, quis iste?
@@ -41,59 +48,61 @@
       <!-- row class creates flexbox that wraps overflowing content -->
       <!-- justify-content-around puts space around 2 elements -->
       <div class="m-5 row justify-content-around">
-      <div class="col-12 col-md-6 col-xl-3 mb-3">
-        <!-- todo start -->
-        <div class="card">
-          <h4 class="card-header bg-dark text-light">
-            To Do
-          </h4>
-          <ul id="list-toDo" class="list-group list-group-flush">
-          </ul>
+        <div class="col-12 col-md-6 col-xl-3 mb-3">
+          <!-- todo start -->
+          <div class="card">
+            <h4 class="card-header bg-dark text-light">
+              To Do
+            </h4>
+            <ul id="list-toDo" class="list-group list-group-flush">
+            </ul>
+          </div>
+        </div>
+        <!-- todo end -->
+        <!-- in progress start -->
+        <!-- 768px col-md, 1200px col-xl -->
+        <div class="col-12 col-md-6 col-xl-3 mb-3">
+          <div class="card">
+            <h4 class="card-header bg-dark text-light">
+              In Progress
+            </h4>
+            <ul id="list-inProgress" class="list-group list-group-flush">
+            </ul>
+          </div>
+        </div>
+        <!-- in progress end -->
+        <!-- in review start -->
+        <div class="col-12 col-md-6 col-xl-3 mb-3">
+          <div class="card">
+            <h4 class="card-header bg-dark text-light">
+              In Review
+            </h4>
+            <ul id="list-inReview" class="list-group list-group-flush">
+            </ul>
+          </div>
+        </div>
+        <!-- in review end -->
+        <!-- done start -->
+        <div class="col-12 col-md-6 col-xl-3 mb-3">
+          <div class="card">
+            <h4 class="card-header bg-dark text-light">
+              Done
+            </h4>
+            <ul id="list-done" class="list-group list-group-flush">
+            </ul>
+          </div>
+        </div>
+        <!-- done end -->
+      </div>
+      <!-- mt-auto pushes trash all the way to bottom of <main>, a flex column -->
+      <div class="mt-auto overflow-hidden" id="trash">
+        <!-- trash icon -->
+        <div class="w-100 p-3 text-center bottom-trash">
+          <span class="oi oi-trash"> </span>
+          Drop Here to Remove.
         </div>
       </div>
-      <!-- todo end -->
-      <!-- in progress start -->
-      <!-- 768px col-md, 1200px col-xl -->
-      <div class="col-12 col-md-6 col-xl-3 mb-3">
-        <div class="card">
-          <h4 class="card-header bg-dark text-light">
-            In Progress
-          </h4>
-          <ul id="list-inProgress" class="list-group list-group-flush">
-          </ul>
-        </div>
-      </div>
-      <!-- in progress end -->
-      <!-- in review start -->
-      <div class="col-12 col-md-6 col-xl-3 mb-3">
-        <div class="card">
-          <h4 class="card-header bg-dark text-light">
-            In Review
-          </h4>
-          <ul id="list-inReview" class="list-group list-group-flush">
-          </ul>
-        </div>
-      </div>
-      <!-- in review end -->
-      <!-- done start -->
-      <div class="col-12 col-md-6 col-xl-3 mb-3">
-        <div class="card">
-          <h4 class="card-header bg-dark text-light">
-            Done
-          </h4>
-          <ul id="list-done" class="list-group list-group-flush">
-          </ul>
-        </div>
-      </div>
-      <!-- done end -->
-  </div>
-  <!-- mt-auto pushes trash all the way to bottom of <main>, a flex column -->
-  <div class="mt-auto" id="trash">
-    <div class="w-100 bg-danger p-3 text-center text-light display-4">
-      Drop Here to Remove.
-    </div>
-  </div>
-  </main>
+    </main>
   </div>
 
   <!-- Modal -->
@@ -120,8 +129,8 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save Task</button>
+          <button type="button" class="btn btn-close" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-save">Save Task</button>
         </div>
       </div>
     </div>
